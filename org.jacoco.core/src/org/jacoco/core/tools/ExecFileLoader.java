@@ -61,8 +61,26 @@ public class ExecFileLoader {
 	 *             in case of problems while reading from the stream
 	 */
 	public void load(final InputStream stream) throws IOException {
+		load(stream, true);
+	}
+
+	/**
+	 * Reads all data from given input stream.
+	 *
+	 * @param stream
+	 *            Stream to read data from
+	 * @param first
+	 *            Is it the first stream to be loaded?
+	 * @throws IOException
+	 *             in case of problems while reading from the stream
+	 */
+	public void load(final InputStream stream, boolean first)
+			throws IOException {
+		ExecutionDataReader.ExecReadMode readModeLocal = readMode;
+		if (first)
+			readModeLocal = ExecutionDataReader.ExecReadMode.MERGE;
 		final ExecutionDataReader reader = new ExecutionDataReader(
-				new BufferedInputStream(stream), readMode);
+				new BufferedInputStream(stream), readModeLocal);
 		reader.setExecutionDataVisitor(executionData);
 		reader.setSessionInfoVisitor(sessionInfos);
 		reader.read();
@@ -77,9 +95,23 @@ public class ExecFileLoader {
 	 *             in case of problems while reading from the stream
 	 */
 	public void load(final File file) throws IOException {
+		load(file, true);
+	}
+
+	/**
+	 * Reads all data from given input stream.
+	 *
+	 * @param file
+	 *            file to read data from
+	 * @param first
+	 *            is it the first file to be loaded?
+	 * @throws IOException
+	 *             in case of problems while reading from the stream
+	 */
+	public void load(final File file, boolean first) throws IOException {
 		final InputStream stream = new FileInputStream(file);
 		try {
-			load(stream);
+			load(stream, first);
 		} finally {
 			stream.close();
 		}

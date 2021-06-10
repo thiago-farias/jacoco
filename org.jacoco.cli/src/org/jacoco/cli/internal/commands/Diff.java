@@ -55,10 +55,12 @@ public class Diff extends Command {
 		if (execfiles.isEmpty()) {
 			out.println("[WARN] No execution data files provided.");
 		} else {
+			boolean first = true;
 			for (final File file : execfiles) {
 				out.printf("[INFO] Loading execution data file %s.%n",
 						file.getAbsolutePath());
-				loader.load(file);
+				loader.load(file, first);
+				first = false;
 			}
 		}
 		return loader;
